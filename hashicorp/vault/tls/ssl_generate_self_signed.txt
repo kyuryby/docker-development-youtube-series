@@ -15,25 +15,25 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname="vault-example,vault-example.vault-example.svc.cluster.local,vault-example.vault-example.svc,localhost,127.0.0.1" \
+  -hostname="vault,vault.vault.svc.cluster.local,vault.vault.svc,localhost,127.0.0.1" \
   -profile=default \
-  vault-csr.json | cfssljson -bare vault-example
+  vault-csr.json | cfssljson -bare vault
 
 #get values to make a secret
 cat ca.pem | base64 | tr -d '\n'
-cat vault-example.pem | base64 | tr -d '\n'
-cat vault-example-key.pem | base64 | tr -d '\n'
+cat vault.pem | base64 | tr -d '\n'
+cat vault-key.pem | base64 | tr -d '\n'
 
 #linux - make the secret automatically
 cat <<EOF > ./server-tls-secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: vault-example-tls-secret
+  name: vault-tls-secret
 type: Opaque
 data:
-  vault-example.pem: $(cat vault-example.pem | base64 | tr -d '\n')
-  vault-example-key.pem: $(cat vault-example-key.pem | base64 | tr -d '\n') 
+  vault.pem: $(cat vault.pem | base64 | tr -d '\n')
+  vault-key.pem: $(cat vault-key.pem | base64 | tr -d '\n')
   ca.pem: $(cat ca.pem | base64 | tr -d '\n')
 EOF
 

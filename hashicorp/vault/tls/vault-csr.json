@@ -1,5 +1,5 @@
 {
-  "CN": "vault-example",
+  "CN": "vault",
   "key": {
     "algo": "rsa",
     "size": 2048
