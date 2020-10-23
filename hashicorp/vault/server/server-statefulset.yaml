@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: vault-example
+  name: vault
   labels:
-    app.kubernetes.io/name: vault-example
+    app.kubernetes.io/name: vault
 spec:
-  serviceName: vault-example
+  serviceName: vault
   podManagementPolicy: Parallel
   replicas: 1
   updateStrategy:
     type: "OnDelete"
   selector:
     matchLabels:
-      app.kubernetes.io/name: vault-example
+      app.kubernetes.io/name: vault
       component: server
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: vault-example
+        app.kubernetes.io/name: vault
         component: server
     spec:
       affinity:  
@@ -25,24 +25,24 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: vault-example
+                  app.kubernetes.io/name: vault
                   component: server
               topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
-      serviceAccountName: vault-example      
+      serviceAccountName: vault
       shareProcessNamespace: true
       securityContext:
         fsGroup: 1000
       volumes:
         - name: config
           configMap:
-            name: vault-example-config
+            name: vault-config
         - name: data
           persistentVolumeClaim:
             claimName: vault-claim
         - name: tls-secret
           secret:
-            secretName: vault-example-tls-secret
+            secretName: vault-tls-secret
       initContainers:
         - name: setupperms
           image: alpine:latest
